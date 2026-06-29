@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX 2025 — AI & Frontier Technologies Conference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0D0D0D;
+  --surface:#141414;
+  --surface-r:#1C1C1C;
+  --surface-rr:#242424;
+  --accent:#C8FF47;
+  --accent-dim:#9BBB36;
+  --text-p:#F0EDE8;
+  --text-s:#888580;
+  --text-m:#5C5956;
+  --border:rgba(255,255,255,0.07);
+  --border-a:rgba(255,255,255,0.15);
+  --track-ai:#7C6FF7;
+  --track-f:#F97316;
+  --danger:#F05252;
+  --success:#22C55E;
+  --radius:8px;
+  --font-d:'Syne',sans-serif;
+  --font-b:'Inter',sans-serif;
+  --font-m:'JetBrains Mono',monospace;
+}
+
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text-p);font-family:var(--font-b);font-size:16px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ── LAYOUT ── */
+.page{display:none}.page.active{display:block}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.container--narrow{max-width:720px;margin:0 auto;padding:0 24px}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1200px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-logo{font-family:var(--font-d);font-size:18px;font-weight:800;letter-spacing:-0.02em;color:var(--text-p);cursor:pointer}
+.nav-logo span{color:var(--accent)}
+.nav-actions{display:flex;align-items:center;gap:12px}
+.basket-btn{display:flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border-a);color:var(--text-p);padding:8px 14px;border-radius:var(--radius);cursor:pointer;font-family:var(--font-b);font-size:14px;transition:border-color .2s,background .2s}
+.basket-btn:hover{border-color:var(--accent);background:rgba(200,255,71,0.04)}
+.basket-count{background:var(--accent);color:#0D0D0D;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--font-m)}
+.basket-count.hidden{display:none}
+.admin-link{font-size:12px;color:var(--text-m);text-decoration:none;cursor:pointer;padding:4px 8px;border-radius:4px;transition:color .2s}
+.admin-link:hover{color:var(--text-s)}
+
+/* ── HERO ── */
+.hero{padding:80px 0 60px;border-bottom:1px solid var(--border)}
+.hero-eyebrow{font-family:var(--font-m);font-size:12px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px}
+.hero-title{font-family:var(--font-d);font-size:clamp(48px,7vw,88px);font-weight:800;line-height:0.95;letter-spacing:-0.03em;margin-bottom:28px}
+.hero-title em{font-style:normal;color:var(--accent)}
+.hero-desc{font-size:18px;color:var(--text-s);max-width:560px;line-height:1.7;margin-bottom:40px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:24px}
+.hero-meta-item{display:flex;flex-direction:column;gap:2px}
+.hero-meta-label{font-size:11px;font-family:var(--font-m);color:var(--text-m);letter-spacing:0.08em;text-transform:uppercase}
+.hero-meta-value{font-size:16px;font-weight:500;color:var(--text-p)}
+
+/* ── CONF IMAGE ── */
+.conf-image-section{padding:40px 0 0}
+.conf-image{width:100%;height:320px;object-fit:cover;border-radius:var(--radius);border:1px solid var(--border)}
+.conf-image-placeholder{width:100%;height:320px;background:var(--surface);border-radius:var(--radius);border:1px dashed var(--border-a);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:border-color .2s}
+.conf-image-placeholder:hover{border-color:var(--accent)}
+.conf-image-placeholder svg{opacity:.3}
+.conf-image-placeholder p{font-size:14px;color:var(--text-m)}
+#imageUploadInput{display:none}
+
+/* ── TRACKS SECTION ── */
+.tracks{padding:60px 0}
+.section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:40px;gap:16px;flex-wrap:wrap}
+.section-title{font-family:var(--font-d);font-size:28px;font-weight:700;letter-spacing:-0.02em}
+.section-hint{font-size:13px;color:var(--text-m);font-family:var(--font-m)}
+.tracks-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-radius:var(--radius);overflow:hidden}
+@media(max-width:768px){.tracks-grid{grid-template-columns:1fr}}
+.track-col{background:var(--bg);padding:24px}
+.track-header{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.track-badge{font-family:var(--font-m);font-size:11px;font-weight:500;padding:4px 10px;border-radius:4px;letter-spacing:0.05em;text-transform:uppercase}
+.track-badge.ai{background:rgba(124,111,247,0.15);color:var(--track-ai);border:1px solid rgba(124,111,247,0.25)}
+.track-badge.frontier{background:rgba(249,115,22,0.12);color:var(--track-f);border:1px solid rgba(249,115,22,0.22)}
+.track-title{font-family:var(--font-d);font-size:17px;font-weight:600}
+
+/* ── SESSION CARDS ── */
+.session-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+.session-card:hover{border-color:var(--border-a);background:var(--surface-r)}
+.session-card.in-basket{border-color:var(--accent);background:rgba(200,255,71,0.03)}
+.session-card.full{opacity:.5;cursor:not-allowed}
+.session-card.conflict{opacity:.6;cursor:not-allowed;border-color:rgba(240,82,82,0.3)}
+.session-time{font-family:var(--font-m);font-size:11px;color:var(--text-m);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.session-time-conflict{color:var(--danger);font-size:10px}
+.session-title{font-family:var(--font-d);font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.session-speaker{font-size:13px;color:var(--text-s)}
+.session-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.session-capacity{font-size:11px;font-family:var(--font-m);color:var(--text-m)}
+.session-capacity.low{color:var(--track-f)}
+.session-capacity.full{color:var(--danger)}
+.session-add-btn{font-size:12px;font-family:var(--font-b);font-weight:500;padding:5px 12px;border-radius:4px;border:1px solid var(--border-a);background:transparent;color:var(--text-p);cursor:pointer;transition:all .2s}
+.session-add-btn:hover{border-color:var(--accent);color:var(--accent)}
+.session-add-btn.added{border-color:var(--accent);background:rgba(200,255,71,0.1);color:var(--accent)}
+.session-add-btn.disabled{opacity:.4;cursor:not-allowed}
+.in-basket-indicator{position:absolute;top:12px;right:12px;width:8px;height:8px;background:var(--accent);border-radius:50%}
+
+/* ── BASKET / SIDEBAR ── */
+.basket-page{padding:60px 0;min-height:calc(100vh - 60px)}
+.basket-layout{display:grid;grid-template-columns:1fr 340px;gap:32px;align-items:start}
+@media(max-width:900px){.basket-layout{grid-template-columns:1fr}}
+.basket-sessions{display:flex;flex-direction:column;gap:12px}
+.basket-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.basket-item-info{}
+.basket-item-track{font-family:var(--font-m);font-size:10px;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:4px}
+.basket-item-track.ai{color:var(--track-ai)}
+.basket-item-track.frontier{color:var(--track-f)}
+.basket-item-title{font-family:var(--font-d);font-size:15px;font-weight:600;margin-bottom:3px}
+.basket-item-time{font-size:12px;color:var(--text-s);font-family:var(--font-m)}
+.basket-remove{background:transparent;border:none;color:var(--text-m);cursor:pointer;font-size:18px;line-height:1;padding:2px;transition:color .2s;flex-shrink:0;margin-top:2px}
+.basket-remove:hover{color:var(--danger)}
+.basket-summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;position:sticky;top:80px}
+.basket-summary h3{font-family:var(--font-d);font-size:18px;font-weight:700;margin-bottom:20px}
+.summary-row{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px solid var(--border)}
+.summary-row:last-of-type{border-bottom:none;font-weight:600;font-size:15px}
+.summary-row span:last-child{color:var(--text-s)}
+.summary-free{color:var(--success);font-family:var(--font-m);font-size:13px}
+.proceed-btn{width:100%;padding:14px;background:var(--accent);color:#0D0D0D;border:none;border-radius:var(--radius);font-family:var(--font-d);font-size:15px;font-weight:700;cursor:pointer;margin-top:20px;transition:background .2s,transform .1s;letter-spacing:0.01em}
+.proceed-btn:hover{background:#d9ff6a}
+.proceed-btn:active{transform:scale(0.99)}
+.proceed-btn:disabled{background:var(--surface-rr);color:var(--text-m);cursor:not-allowed}
+.empty-basket{text-align:center;padding:80px 24px;color:var(--text-m)}
+.empty-basket h3{font-family:var(--font-d);font-size:22px;font-weight:700;margin-bottom:8px;color:var(--text-s)}
+.empty-basket p{font-size:15px}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--text-s);cursor:pointer;margin-bottom:32px;transition:color .2s}
+.back-link:hover{color:var(--text-p)}
+
+/* ── REGISTRATION FORM ── */
+.reg-page{padding:60px 0;min-height:calc(100vh - 60px)}
+.reg-header{margin-bottom:48px}
+.reg-header h1{font-family:var(--font-d);font-size:40px;font-weight:800;letter-spacing:-0.02em;margin-bottom:10px}
+.reg-header p{font-size:16px;color:var(--text-s);max-width:480px}
+.reg-layout{display:grid;grid-template-columns:1fr 320px;gap:40px;align-items:start}
+@media(max-width:900px){.reg-layout{grid-template-columns:1fr}}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:13px;font-weight:500;margin-bottom:8px;color:var(--text-s);font-family:var(--font-m);letter-spacing:0.03em;text-transform:uppercase}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text-p);padding:12px 16px;border-radius:var(--radius);font-family:var(--font-b);font-size:15px;transition:border-color .2s,background .2s;outline:none;appearance:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);background:var(--surface-r)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text-m)}
+.form-select option{background:var(--surface-rr);color:var(--text-p)}
+.form-textarea{min-height:90px;resize:vertical}
+.form-section-title{font-family:var(--font-d);font-size:18px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.reg-side-sessions{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:sticky;top:80px}
+.reg-side-sessions h4{font-family:var(--font-d);font-size:15px;font-weight:700;margin-bottom:16px;color:var(--text-s)}
+.reg-session-item{font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:8px}
+.reg-session-item:last-child{border-bottom:none}
+.reg-session-dot{width:6px;height:6px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.reg-session-dot.ai{background:var(--track-ai)}
+.reg-session-dot.frontier{background:var(--track-f)}
+.submit-btn{width:100%;padding:16px;background:var(--accent);color:#0D0D0D;border:none;border-radius:var(--radius);font-family:var(--font-d);font-size:16px;font-weight:700;cursor:pointer;margin-top:12px;transition:background .2s;letter-spacing:0.01em}
+.submit-btn:hover{background:#d9ff6a}
+.submit-btn:disabled{background:var(--surface-rr);color:var(--text-m);cursor:not-allowed}
+.form-note{font-size:12px;color:var(--text-m);margin-top:10px;text-align:center;line-height:1.6}
+
+/* ── CONFIRMATION ── */
+.confirm-page{padding:80px 0;min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center}
+.confirm-box{text-align:center;max-width:560px}
+.confirm-icon{width:72px;height:72px;border:2px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 28px;font-size:28px}
+.confirm-box h1{font-family:var(--font-d);font-size:36px;font-weight:800;margin-bottom:16px;letter-spacing:-0.02em}
+.confirm-box p{font-size:16px;color:var(--text-s);line-height:1.7;margin-bottom:28px}
+.confirm-ref{font-family:var(--font-m);font-size:13px;background:var(--surface);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius);display:inline-block;color:var(--accent);margin-bottom:32px}
+.confirm-sessions{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:left;margin-bottom:28px}
+.confirm-sessions h4{font-size:13px;font-family:var(--font-m);color:var(--text-m);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px}
+.home-btn{display:inline-flex;padding:12px 28px;background:transparent;border:1px solid var(--border-a);border-radius:var(--radius);color:var(--text-p);font-family:var(--font-b);font-size:15px;cursor:pointer;transition:all .2s}
+.home-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── ADMIN ── */
+.admin-login{padding:80px 0;min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center}
+.admin-login-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px;width:100%;max-width:400px}
+.admin-login-box h2{font-family:var(--font-d);font-size:24px;font-weight:700;margin-bottom:8px}
+.admin-login-box p{font-size:14px;color:var(--text-m);margin-bottom:28px}
+.login-btn{width:100%;padding:14px;background:var(--accent);color:#0D0D0D;border:none;border-radius:var(--radius);font-family:var(--font-d);font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
+.login-btn:hover{background:#d9ff6a}
+.login-btn:disabled{background:var(--surface-rr);color:var(--text-m);cursor:not-allowed}
+.login-error{font-size:13px;color:var(--danger);margin-top:8px;display:none}
+
+.admin-page{padding:40px 0;min-height:calc(100vh - 60px)}
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.admin-topbar h1{font-family:var(--font-d);font-size:28px;font-weight:800;letter-spacing:-0.02em}
+.admin-stats{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:32px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 24px;flex:1;min-width:120px}
+.stat-card .stat-n{font-family:var(--font-d);font-size:28px;font-weight:800;color:var(--text-p)}
+.stat-card .stat-l{font-size:12px;color:var(--text-m);font-family:var(--font-m);text-transform:uppercase;letter-spacing:0.07em;margin-top:2px}
+.stat-card.accent .stat-n{color:var(--accent)}
+.stat-card.success .stat-n{color:var(--success)}
+.stat-card.danger .stat-n{color:var(--danger)}
+
+.admin-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.filter-btn{padding:6px 14px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-s);font-size:13px;cursor:pointer;transition:all .2s;font-family:var(--font-b)}
+.filter-btn:hover{border-color:var(--border-a);color:var(--text-p)}
+.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(200,255,71,0.05)}
+
+.reg-table{width:100%;border-collapse:collapse}
+.reg-table th{font-size:11px;font-family:var(--font-m);color:var(--text-m);text-transform:uppercase;letter-spacing:0.08em;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
+.reg-table td{padding:14px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:top}
+.reg-table tr:hover td{background:var(--surface)}
+.reg-table tr:last-child td{border-bottom:none}
+.status-badge{font-size:11px;font-family:var(--font-m);padding:3px 10px;border-radius:4px;font-weight:500;white-space:nowrap}
+.status-badge.pending{background:rgba(136,133,128,0.15);color:var(--text-s);border:1px solid var(--border)}
+.status-badge.approved{background:rgba(34,197,94,0.12);color:var(--success);border:1px solid rgba(34,197,94,0.2)}
+.status-badge.rejected{background:rgba(240,82,82,0.12);color:var(--danger);border:1px solid rgba(240,82,82,0.2)}
+.action-btn{font-size:12px;padding:5px 12px;border-radius:4px;cursor:pointer;font-family:var(--font-b);font-weight:500;transition:all .15s;border:1px solid transparent}
+.action-btn.approve{background:rgba(34,197,94,0.1);color:var(--success);border-color:rgba(34,197,94,0.2)}
+.action-btn.approve:hover{background:rgba(34,197,94,0.2)}
+.action-btn.reject{background:rgba(240,82,82,0.1);color:var(--danger);border-color:rgba(240,82,82,0.2)}
+.action-btn.reject:hover{background:rgba(240,82,82,0.2)}
+.action-btn:disabled{opacity:.4;cursor:not-allowed}
+.sessions-list-small{font-size:12px;color:var(--text-s)}
+.sessions-list-small span{display:block;padding:1px 0}
+.logout-btn{font-size:13px;color:var(--text-m);background:transparent;border:1px solid var(--border);padding:7px 14px;border-radius:4px;cursor:pointer;font-family:var(--font-b);transition:all .2s}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface-r);border:1px solid var(--border-a);border-radius:12px;padding:32px;max-width:560px;width:100%;position:relative;max-height:85vh;overflow-y:auto}
+.modal-close{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--text-m);font-size:20px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:color .2s}
+.modal-close:hover{color:var(--text-p)}
+.modal-track-badge{margin-bottom:16px;display:inline-block}
+.modal-title{font-family:var(--font-d);font-size:26px;font-weight:700;margin-bottom:8px;letter-spacing:-0.01em;line-height:1.2}
+.modal-speaker{font-size:15px;color:var(--text-s);margin-bottom:20px}
+.modal-time{font-family:var(--font-m);font-size:12px;color:var(--text-m);margin-bottom:20px;padding:10px;background:var(--surface);border-radius:4px;display:inline-block}
+.modal-desc{font-size:15px;color:var(--text-s);line-height:1.7;margin-bottom:24px}
+.modal-add-btn{width:100%;padding:14px;background:var(--accent);color:#0D0D0D;border:none;border-radius:var(--radius);font-family:var(--font-d);font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
+.modal-add-btn:hover{background:#d9ff6a}
+.modal-add-btn.added{background:var(--surface-rr);color:var(--text-s);border:1px solid var(--border)}
+.modal-add-btn:disabled{background:var(--surface-rr);color:var(--text-m);cursor:not-allowed}
+
+/* ── ADMIN MODALS / EMAIL PREVIEW ── */
+.email-preview{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-top:12px;font-size:13px;color:var(--text-s);white-space:pre-wrap;font-family:var(--font-m);line-height:1.7;max-height:300px;overflow-y:auto}
+
+/* ── MISC ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface-rr);border:1px solid var(--border-a);border-radius:var(--radius);padding:12px 20px;font-size:14px;z-index:300;transform:translateY(20px);opacity:0;transition:all .25s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:rgba(34,197,94,0.4);color:var(--success)}
+.toast.error{border-color:rgba(240,82,82,0.4);color:var(--danger)}
+
+.edit-sessions-btn{font-size:12px;color:var(--text-m);background:transparent;border:1px solid var(--border);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:var(--font-b);transition:all .2s;margin-top:20px;width:100%}
+.edit-sessions-btn:hover{border-color:var(--border-a);color:var(--text-s)}
+
+.conf-edit-btn{font-size:12px;color:var(--text-m);background:transparent;border:1px solid var(--border);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:var(--font-b);transition:all .2s}
+.conf-edit-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.admin-tab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-m);font-family:var(--font-b);font-size:14px;font-weight:500;padding:10px 4px;cursor:pointer;transition:all .2s;margin-bottom:-1px}
+.admin-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.admin-tab:hover{color:var(--text-s)}
+.admin-sessions-track{margin-bottom:32px}
+.admin-sessions-track-title{font-family:var(--font-d);font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.admin-session-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.admin-session-row:hover{border-color:var(--border-a)}
+.admin-session-info{flex:1;min-width:200px}
+.admin-session-info .s-title{font-weight:500;font-size:14px;margin-bottom:2px}
+.admin-session-info .s-meta{font-size:12px;color:var(--text-m);font-family:var(--font-m)}
+.cap-bar{width:120px}
+.cap-bar-track{height:4px;background:var(--surface-rr);border-radius:2px;margin-top:6px}
+.cap-bar-fill{height:4px;border-radius:2px;transition:width .3s}
+
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.session-edit-modal .form-input,.session-edit-modal .form-select,.session-edit-modal .form-textarea{font-size:14px;padding:10px 14px}
+.session-edit-modal .form-label{font-size:11px;margin-bottom:6px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+@media(max-width:640px){
+  .hero-title{font-size:40px}
+  .two-col{grid-template-columns:1fr}
+  .reg-table{font-size:12px}
+  .reg-table th,.reg-table td{padding:8px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')">APEX<span>.</span>25</div>
+    <div class="nav-actions">
+      <span class="admin-link" onclick="showPage('adminLogin')" title="Admin area">Admin</span>
+      <button class="basket-btn" onclick="showPage('basket')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        My basket
+        <span class="basket-count hidden" id="basketCount">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="page-home">
+  <div class="container">
+    <div class="hero">
+      <div class="hero-eyebrow" id="heroEyebrow">26–27 March 2025 · London, UK</div>
+      <h1 class="hero-title" id="heroTitle">At the<br>edge of<br><em>what's next</em></h1>
+      <p class="hero-desc" id="heroDesc">Two days of sessions at the intersection of artificial intelligence and frontier technologies — from researchers, builders, and practitioners shaping what comes after.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Tracks</span>
+          <span class="hero-meta-value">2</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Sessions</span>
+          <span class="hero-meta-value">12</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Format</span>
+          <span class="hero-meta-value">Invite-only</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Cost</span>
+          <span class="hero-meta-value">Free</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conference image -->
+    <div class="conf-image-section">
+      <div id="confImageContainer">
+        <div class="conf-image-placeholder" onclick="document.getElementById('imageUploadInput').click()">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p>Click to upload a conference image</p>
+        </div>
+        <input type="file" id="imageUploadInput" accept="image/*" onchange="handleImageUpload(event)">
+      </div>
+    </div>
+
+    <!-- Sessions -->
+    <div class="tracks">
+      <div class="section-header">
+        <h2 class="section-title">Sessions</h2>
+        <span class="section-hint">Click a session to learn more · Add to your basket to register interest</span>
+      </div>
+      <div class="tracks-grid" id="tracksGrid">
+        <p style="color:var(--text-m);font-family:var(--font-m);font-size:13px">Loading sessions…</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BASKET PAGE ===== -->
+<div class="page" id="page-basket">
+  <div class="basket-page">
+    <div class="container">
+      <span class="back-link" onclick="showPage('home')">← Back to sessions</span>
+      <h1 style="font-family:var(--font-d);font-size:36px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px">Your basket</h1>
+      <p style="color:var(--text-s);margin-bottom:36px;font-size:15px">Review your selected sessions before registering interest.</p>
+      <div id="basketContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REGISTRATION PAGE ===== -->
+<div class="page" id="page-register">
+  <div class="reg-page">
+    <div class="container">
+      <span class="back-link" onclick="showPage('basket')">← Back to basket</span>
+      <div class="reg-header">
+        <h1>Register interest</h1>
+        <p>Tell us about yourself. We'll review registrations and confirm your place by email.</p>
+      </div>
+      <div class="reg-layout">
+        <div>
+          <h3 class="form-section-title">Your details</h3>
+          <div class="two-col">
+            <div class="form-group">
+              <label class="form-label">First name</label>
+              <input class="form-input" id="fname" type="text" placeholder="Jane">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last name</label>
+              <input class="form-input" id="lname" type="text" placeholder="Smith">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email address</label>
+            <input class="form-input" id="email" type="email" placeholder="jane@company.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Company</label>
+            <input class="form-input" id="company" type="text" placeholder="Acme Corp">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Job title</label>
+            <input class="form-input" id="jobtitle" type="text" placeholder="Head of Research">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dietary requirements</label>
+            <select class="form-select" id="dietary">
+              <option value="none">No requirements</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="vegan">Vegan</option>
+              <option value="glutenfree">Gluten free</option>
+              <option value="halal">Halal</option>
+              <option value="kosher">Kosher</option>
+              <option value="other">Other (please specify below)</option>
+            </select>
+          </div>
+          <div class="form-group" id="dietaryOtherGroup" style="display:none">
+            <label class="form-label">Please specify</label>
+            <input class="form-input" id="dietaryOther" type="text" placeholder="e.g. nut allergy">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Anything else you'd like to tell us? <span style="color:var(--text-m)">(optional)</span></label>
+            <textarea class="form-textarea" id="notes" placeholder="e.g. a question for a speaker, accessibility needs…"></textarea>
+          </div>
+          <button class="submit-btn" id="submitBtn" onclick="submitRegistration()">Submit registration of interest</button>
+          <p class="form-note">All sessions are free. This is an expression of interest — we'll be in touch with confirmation.</p>
+        </div>
+        <div>
+          <div class="reg-side-sessions">
+            <h4>Sessions in your basket</h4>
+            <div id="regSideSessions"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRMATION PAGE ===== -->
+<div class="page" id="page-confirm">
+  <div class="confirm-page">
+    <div class="container--narrow">
+      <div class="confirm-box">
+        <div class="confirm-icon">✓</div>
+        <h1>We've received your interest</h1>
+        <p>Thank you for registering. Our team will review your application and you'll receive a confirmation or update by email within a few working days.</p>
+        <div class="confirm-ref" id="confirmRef">REF: APEX-XXXX</div>
+        <div class="confirm-sessions" id="confirmSessions"></div>
+        <p style="font-size:13px;color:var(--text-m);margin-bottom:24px">An acknowledgement email has been sent to <span id="confirmEmail" style="color:var(--text-s)"></span></p>
+        <button class="home-btn" onclick="showPage('home')">Back to home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN LOGIN ===== -->
+<div class="page" id="page-adminLogin">
+  <div class="admin-login">
+    <div class="admin-login-box">
+      <h2>Admin access</h2>
+      <p>Sign in to manage registrations and send confirmations.</p>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="adminPassword" type="password" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()">
+      </div>
+      <div class="login-error" id="loginError">Incorrect password. Try again.</div>
+      <button class="login-btn" id="adminLoginBtn" onclick="adminLogin()">Sign in</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN DASHBOARD ===== -->
+<div class="page" id="page-admin">
+  <div class="admin-page">
+    <div class="container">
+      <div class="admin-topbar">
+        <h1>Registrations</h1>
+        <button class="logout-btn" onclick="adminLogout()">Sign out</button>
+      </div>
+      <div class="admin-stats" id="adminStats"></div>
+      <div style="display:flex;gap:12px;margin-bottom:28px;border-bottom:1px solid var(--border)">
+        <button id="tab-regs" class="admin-tab active" onclick="switchAdminTab('regs')">Registrations</button>
+        <button id="tab-sessions" class="admin-tab" onclick="switchAdminTab('sessions')">Manage sessions</button>
+      </div>
+
+      <div id="admin-tab-regs">
+      <div class="admin-filters">
+        <button class="filter-btn active" onclick="filterRegs('all',this)">All</button>
+        <button class="filter-btn" onclick="filterRegs('pending',this)">Pending</button>
+        <button class="filter-btn" onclick="filterRegs('approved',this)">Approved</button>
+        <button class="filter-btn" onclick="filterRegs('rejected',this)">Rejected</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="reg-table" id="regTable">
+          <thead>
+            <tr>
+              <th>Ref</th>
+              <th>Name</th>
+              <th>Company</th>
+              <th>Job title</th>
+              <th>Email</th>
+              <th>Sessions</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="regTableBody"></tbody>
+        </table>
+      </div>
+      <div id="adminEmpty" style="display:none;text-align:center;padding:60px;color:var(--text-m)">
+        <p style="font-size:16px">No registrations yet.</p>
+      </div>
+      </div><!-- end tab-regs -->
+
+      <!-- Sessions management tab -->
+      <div id="admin-tab-sessions" style="display:none">
+        <div id="adminSessionsGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SESSION DETAIL MODAL -->
+<div class="modal-overlay" id="sessionModal" onclick="closeModal(event)">
+  <div class="modal" id="sessionModalContent">
+    <button class="modal-close" onclick="closeSessionModal()">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- SESSION EDIT MODAL -->
+<div class="modal-overlay" id="editModal" onclick="closeEditModal(event)">
+  <div class="modal session-edit-modal" id="editModalContent" style="max-width:640px">
+    <button class="modal-close" onclick="document.getElementById('editModal').classList.remove('open')">✕</button>
+    <h2 style="font-family:var(--font-d);font-size:22px;font-weight:700;margin-bottom:24px">Edit session</h2>
+    <div id="editModalBody"></div>
+  </div>
+</div>
+
+<!-- EMAIL PREVIEW MODAL -->
+<div class="modal-overlay" id="emailModal" onclick="closeEmailModal(event)">
+  <div class="modal" id="emailModalContent">
+    <button class="modal-close" onclick="document.getElementById('emailModal').classList.remove('open')">✕</button>
+    <div id="emailModalBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+const TIMESLOTS = [
+  '09:00 – 10:00',
+  '10:15 – 11:15',
+  '11:30 – 12:30',
+  '13:30 – 14:30',
+  '14:45 – 15:45',
+  '16:00 – 17:00'
+];
+
+// `sessions` is the source of truth fetched from Supabase (via the sessions function).
+// `basket` is the only thing kept in localStorage — an in-progress selection that
+// hasn't been submitted yet, so there's no need to persist it server-side.
+let state = {
+  sessions: [],
+  basket: loadBasket(),
+  confImage: localStorage.getItem('apex25_conf_image') || null
+};
+
+let adminRegistrations = [];
+let adminSessionsCache = [];
+
+function loadBasket() {
+  try {
+    const saved = localStorage.getItem('apex25_basket');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return [];
+}
+
+function saveBasket() {
+  localStorage.setItem('apex25_basket', JSON.stringify(state.basket));
+  updateBasketCount();
+}
+
+function getAdminToken() {
+  return sessionStorage.getItem('apex25_admin_token');
+}
+
+function setAdminToken(token) {
+  sessionStorage.setItem('apex25_admin_token', token);
+}
+
+function clearAdminToken() {
+  sessionStorage.removeItem('apex25_admin_token');
+}
+
+// Normalize a row from the `sessions` table (snake_case) into the shape the UI uses.
+function normalizeSession(row) {
+  return {
+    id: row.id,
+    track: row.track,
+    slotIndex: row.slot_index,
+    title: row.title,
+    speaker: row.speaker,
+    description: row.description,
+    capacity: row.capacity,
+    registrations: row.registrations
+  };
+}
+
+async function fetchSessions() {
+  const res = await fetch('/.netlify/functions/sessions');
+  if (!res.ok) throw new Error('Failed to load sessions');
+  const data = await res.json();
+  state.sessions = (data.sessions || []).map(normalizeSession);
+}
+
+// ─────────────────────────────────────────────
+// PAGE ROUTING
+// ─────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (name === 'home') renderHome();
+  if (name === 'basket') renderBasket();
+  if (name === 'register') renderRegSide();
+  if (name === 'admin') {
+    if (!getAdminToken()) { showPage('adminLogin'); return; }
+    renderAdmin();
+  }
+}
+
+// ─────────────────────────────────────────────
+// HOME / SESSIONS
+// ─────────────────────────────────────────────
+async function renderHome() {
+  if (state.confImage) {
+    document.getElementById('confImageContainer').innerHTML =
+      `<img src="${state.confImage}" class="conf-image" alt="Conference" onclick="document.getElementById('imageUploadInput2').click()">
+       <input type="file" id="imageUploadInput2" accept="image/*" style="display:none" onchange="handleImageUpload(event)">`;
+  }
+  try {
+    await fetchSessions();
+    renderTracks();
+  } catch (e) {
+    document.getElementById('tracksGrid').innerHTML = `<p style="color:var(--danger);font-family:var(--font-m);font-size:13px">Could not load sessions. Please refresh.</p>`;
+  }
+}
+
+function renderTracks() {
+  const grid = document.getElementById('tracksGrid');
+  const aiSessions = state.sessions.filter(s => s.track === 'ai').sort((a,b) => a.slotIndex - b.slotIndex);
+  const fSessions = state.sessions.filter(s => s.track === 'frontier').sort((a,b) => a.slotIndex - b.slotIndex);
+
+  grid.innerHTML = `
+    <div class="track-col">
+      <div class="track-header">
+        <span class="track-badge ai">AI</span>
+        <span class="track-title">Artificial Intelligence</span>
+      </div>
+      ${aiSessions.map(s => renderSessionCard(s)).join('')}
+    </div>
+    <div class="track-col">
+      <div class="track-header">
+        <span class="track-badge frontier">Frontier</span>
+        <span class="track-title">Frontier Technologies</span>
+      </div>
+      ${fSessions.map(s => renderSessionCard(s)).join('')}
+    </div>`;
+}
+
+function renderSessionCard(s) {
+  const inBasket = state.basket.includes(s.id);
+  const isFull = s.registrations >= s.capacity;
+  const conflict = hasConflict(s);
+  const spots = s.capacity - s.registrations;
+  const spotsLow = spots <= 5 && spots > 0;
+
+  let cardClass = 'session-card';
+  if (inBasket) cardClass += ' in-basket';
+  else if (isFull) cardClass += ' full';
+  else if (conflict) cardClass += ' conflict';
+
+  let btnText = 'Add to basket';
+  let btnClass = 'session-add-btn';
+  let btnDisabled = '';
+  if (inBasket) { btnText = 'In basket'; btnClass += ' added'; }
+  else if (isFull) { btnText = 'Session full'; btnClass += ' disabled'; btnDisabled = 'disabled'; }
+  else if (conflict) { btnText = 'Time conflict'; btnClass += ' disabled'; btnDisabled = 'disabled'; }
+
+  let capacityClass = 'session-capacity';
+  let capacityText = spots > 0 ? `${spots} of ${s.capacity} places remaining` : 'Session full';
+  if (isFull) capacityClass += ' full';
+  else if (spotsLow) capacityClass += ' low';
+
+  return `
+    <div class="${cardClass}" id="card-${s.id}">
+      ${inBasket ? '<div class="in-basket-indicator"></div>' : ''}
+      <div class="session-time">
+        ${TIMESLOTS[s.slotIndex]}
+        ${conflict && !inBasket ? '<span class="session-time-conflict">Time conflict with basket</span>' : ''}
+      </div>
+      <div class="session-title" onclick="openSessionModal('${s.id}')" style="cursor:pointer">${s.title}</div>
+      <div class="session-speaker">${s.speaker}</div>
+      <div class="session-footer">
+        <span class="${capacityClass}">${capacityText}</span>
+        <button class="${btnClass}" ${btnDisabled}
+          onclick="${!btnDisabled ? `toggleBasket('${s.id}')` : ''}">
+          ${btnText}
+        </button>
+      </div>
+    </div>`;
+}
+
+function hasConflict(session) {
+  if (state.basket.includes(session.id)) return false;
+  return state.basket.some(id => {
+    const other = state.sessions.find(s => s.id === id);
+    return other && other.slotIndex === session.slotIndex;
+  });
+}
+
+function toggleBasket(id) {
+  const session = state.sessions.find(s => s.id === id);
+  if (!session) return;
+  if (state.basket.includes(id)) {
+    state.basket = state.basket.filter(b => b !== id);
+    showToast('Removed from basket');
+  } else {
+    if (session.registrations >= session.capacity) { showToast('Session is full','error'); return; }
+    if (hasConflict(session)) { showToast('Time conflict with another session in your basket','error'); return; }
+    state.basket.push(id);
+    showToast('Added to basket ✓','success');
+  }
+  saveBasket();
+  renderTracks();
+}
+
+function handleImageUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    state.confImage = ev.target.result;
+    localStorage.setItem('apex25_conf_image', state.confImage);
+    renderHome();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─────────────────────────────────────────────
+// SESSION MODAL
+// ─────────────────────────────────────────────
+function openSessionModal(id) {
+  const s = state.sessions.find(s => s.id === id);
+  if (!s) return;
+  const inBasket = state.basket.includes(id);
+  const isFull = s.registrations >= s.capacity;
+  const conflict = hasConflict(s);
+
+  let btnText = 'Add to basket', btnClass = 'modal-add-btn', btnAttr = '';
+  if (inBasket) { btnText = '✓ In basket'; btnClass += ' added'; btnAttr = 'disabled'; }
+  else if (isFull) { btnText = 'Session full'; btnAttr = 'disabled'; }
+  else if (conflict) { btnText = 'Time conflict with basket'; btnAttr = 'disabled'; }
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-track-badge"><span class="track-badge ${s.track}">${s.track === 'ai' ? 'AI' : 'Frontier'}</span></div>
+    <h2 class="modal-title">${s.title}</h2>
+    <p class="modal-speaker">${s.speaker}</p>
+    <div class="modal-time">🕐 ${TIMESLOTS[s.slotIndex]} · 1 hour</div>
+    <p class="modal-desc">${s.description}</p>
+    <p style="font-size:13px;color:var(--text-m);margin-bottom:16px">${s.capacity - s.registrations} places remaining of ${s.capacity}</p>
+    <button class="${btnClass}" ${btnAttr} onclick="toggleBasket('${id}');closeSessionModal();renderTracks()">${btnText}</button>`;
+
+  document.getElementById('sessionModal').classList.add('open');
+}
+
+function closeSessionModal() { document.getElementById('sessionModal').classList.remove('open'); }
+function closeModal(e) { if (e.target === document.getElementById('sessionModal')) closeSessionModal(); }
+function closeEditModal(e) { if (e.target === document.getElementById('editModal')) document.getElementById('editModal').classList.remove('open'); }
+function closeEmailModal(e) { if (e.target === document.getElementById('emailModal')) document.getElementById('emailModal').classList.remove('open'); }
+
+// ─────────────────────────────────────────────
+// BASKET
+// ─────────────────────────────────────────────
+function renderBasket() {
+  const container = document.getElementById('basketContent');
+  if (state.basket.length === 0) {
+    container.innerHTML = `<div class="empty-basket"><h3>Your basket is empty</h3><p>Browse sessions above and add the ones you'd like to attend.</p><br><button class="home-btn" onclick="showPage('home')" style="margin-top:16px">Browse sessions</button></div>`;
+    return;
+  }
+
+  const items = state.basket.map(id => state.sessions.find(s => s.id === id)).filter(Boolean);
+  const itemsHtml = items.map(s => `
+    <div class="basket-item">
+      <div class="basket-item-info">
+        <div class="basket-item-track ${s.track}">${s.track === 'ai' ? 'AI Track' : 'Frontier Track'}</div>
+        <div class="basket-item-title">${s.title}</div>
+        <div class="basket-item-time">${TIMESLOTS[s.slotIndex]}</div>
+      </div>
+      <button class="basket-remove" onclick="removeFromBasket('${s.id}')" title="Remove">✕</button>
+    </div>`).join('');
+
+  container.innerHTML = `
+    <div class="basket-layout">
+      <div class="basket-sessions">${itemsHtml}</div>
+      <div class="basket-summary">
+        <h3>Order summary</h3>
+        ${items.map(s => `<div class="summary-row"><span>${s.title.substring(0,30)}…</span><span class="summary-free">Free</span></div>`).join('')}
+        <div class="summary-row"><span>Total</span><span class="summary-free">£0.00</span></div>
+        <button class="proceed-btn" onclick="showPage('register')">Proceed to register interest →</button>
+        <button class="edit-sessions-btn" onclick="showPage('home')">← Continue browsing sessions</button>
+      </div>
+    </div>`;
+}
+
+function removeFromBasket(id) {
+  state.basket = state.basket.filter(b => b !== id);
+  saveBasket();
+  renderBasket();
+  renderTracks();
+}
+
+function updateBasketCount() {
+  const count = state.basket.length;
+  const el = document.getElementById('basketCount');
+  el.textContent = count;
+  el.classList.toggle('hidden', count === 0);
+}
+
+// ─────────────────────────────────────────────
+// REGISTRATION
+// ─────────────────────────────────────────────
+function renderRegSide() {
+  const items = state.basket.map(id => state.sessions.find(s => s.id === id)).filter(Boolean);
+  document.getElementById('regSideSessions').innerHTML = items.map(s => `
+    <div class="reg-session-item">
+      <div class="reg-session-dot ${s.track}"></div>
+      <div>
+        <div style="font-weight:500;color:var(--text-p)">${s.title}</div>
+        <div style="color:var(--text-m);font-size:11px;font-family:var(--font-m);margin-top:2px">${TIMESLOTS[s.slotIndex]}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('dietary').onchange = function() {
+    document.getElementById('dietaryOtherGroup').style.display = this.value === 'other' ? 'block' : 'none';
+  };
+}
+
+async function submitRegistration() {
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const jobtitle = document.getElementById('jobtitle').value.trim();
+
+  if (!fname || !lname || !email || !company || !jobtitle) {
+    showToast('Please fill in all required fields','error'); return;
+  }
+  if (!email.includes('@')) { showToast('Please enter a valid email address','error'); return; }
+  if (state.basket.length === 0) { showToast('Your basket is empty','error'); return; }
+
+  const dietarySelect = document.getElementById('dietary').value;
+  const dietaryOther = document.getElementById('dietaryOther').value.trim();
+  const notes = document.getElementById('notes').value.trim();
+  const dietary = dietarySelect === 'other' ? dietaryOther : dietarySelect;
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting…';
+
+  try {
+    const res = await fetch('/.netlify/functions/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstName: fname,
+        lastName: lname,
+        email, company, jobTitle: jobtitle,
+        dietary, notes,
+        sessionIds: state.basket
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.error || 'Could not submit registration', 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit registration of interest';
+      return;
+    }
+
+    const basketSessions = state.basket.map(id => state.sessions.find(s => s.id === id)).filter(Boolean);
+
+    document.getElementById('confirmRef').textContent = 'Ref: ' + data.ref;
+    document.getElementById('confirmEmail').textContent = email;
+    document.getElementById('confirmSessions').innerHTML = `
+      <h4>Sessions registered for</h4>
+      ${basketSessions.map(s => `<div class="reg-session-item">
+        <div class="reg-session-dot ${s.track}"></div>
+        <div><div style="font-weight:500">${s.title}</div><div style="font-size:12px;color:var(--text-m);font-family:var(--font-m)">${TIMESLOTS[s.slotIndex]}</div></div>
+      </div>`).join('')}`;
+
+    state.basket = [];
+    saveBasket();
+    showPage('confirm');
+  } catch (e) {
+    showToast('Network error — please try again', 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit registration of interest';
+  }
+}
+
+// ─────────────────────────────────────────────
+// ADMIN
+// ─────────────────────────────────────────────
+async function adminLogin() {
+  const pw = document.getElementById('adminPassword').value;
+  const btn = document.getElementById('adminLoginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+
+  try {
+    const res = await fetch('/.netlify/functions/admin-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      document.getElementById('loginError').style.display = 'block';
+      return;
+    }
+    setAdminToken(data.token);
+    document.getElementById('loginError').style.display = 'none';
+    document.getElementById('adminPassword').value = '';
+    showPage('admin');
+  } catch (e) {
+    document.getElementById('loginError').textContent = 'Network error. Try again.';
+    document.getElementById('loginError').style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sign in';
+  }
+}
+
+function adminLogout() {
+  clearAdminToken();
+  showPage('home');
+}
+
+async function fetchAdminData() {
+  const res = await fetch('/.netlify/functions/admin-registrations', {
+    headers: { Authorization: 'Bearer ' + getAdminToken() }
+  });
+  if (res.status === 401) {
+    clearAdminToken();
+    showPage('adminLogin');
+    throw new Error('Unauthorized');
+  }
+  if (!res.ok) throw new Error('Failed to load admin data');
+  const data = await res.json();
+  adminRegistrations = data.registrations || [];
+  adminSessionsCache = (data.sessions || []).map(normalizeSession);
+}
+
+async function renderAdmin(filter) {
+  filter = filter || 'all';
+  try {
+    await fetchAdminData();
+  } catch (e) {
+    return;
+  }
+
+  const regs = adminRegistrations.filter(r => filter === 'all' || r.status === filter);
+
+  const counts = {
+    total: adminRegistrations.length,
+    pending: adminRegistrations.filter(r => r.status === 'pending').length,
+    approved: adminRegistrations.filter(r => r.status === 'approved').length,
+    rejected: adminRegistrations.filter(r => r.status === 'rejected').length
+  };
+
+  document.getElementById('adminStats').innerHTML = `
+    <div class="stat-card"><div class="stat-n">${counts.total}</div><div class="stat-l">Total</div></div>
+    <div class="stat-card"><div class="stat-n">${counts.pending}</div><div class="stat-l">Pending</div></div>
+    <div class="stat-card success"><div class="stat-n">${counts.approved}</div><div class="stat-l">Approved</div></div>
+    <div class="stat-card danger"><div class="stat-n">${counts.rejected}</div><div class="stat-l">Rejected</div></div>`;
+
+  if (regs.length === 0) {
+    document.getElementById('regTable').style.display = 'none';
+    document.getElementById('adminEmpty').style.display = 'block';
+  } else {
+    document.getElementById('regTable').style.display = 'table';
+    document.getElementById('adminEmpty').style.display = 'none';
+  }
+
+  document.getElementById('regTableBody').innerHTML = regs.map(r => {
+    const sessions = r.sessions.map(id => adminSessionsCache.find(s => s.id === id)).filter(Boolean);
+    const statusBadge = `<span class="status-badge ${r.status}">${r.status}</span>`;
+    const isPending = r.status === 'pending';
+    return `<tr>
+      <td><code style="font-size:11px;color:var(--text-m)">${r.id}</code></td>
+      <td style="font-weight:500">${r.name}</td>
+      <td>${r.company}</td>
+      <td style="color:var(--text-s)">${r.job_title}</td>
+      <td style="color:var(--text-s)">${r.email}</td>
+      <td>
+        <div class="sessions-list-small">
+          ${sessions.map(s => `<span><span style="color:${s.track==='ai'?'var(--track-ai)':'var(--track-f)'}">●</span> ${s.title.substring(0,28)}…</span>`).join('')}
+        </div>
+      </td>
+      <td>${statusBadge}</td>
+      <td>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${isPending ? `
+          <button class="action-btn approve" onclick="updateRegistration('${r.id}','approve')">Approve</button>
+          <button class="action-btn reject" onclick="updateRegistration('${r.id}','reject')">Reject</button>` : `
+          <span style="font-size:11px;color:var(--text-m)">Email sent</span>`}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterRegs(f, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAdmin(f);
+}
+
+async function updateRegistration(id, action) {
+  try {
+    const res = await fetch('/.netlify/functions/admin-update-registration', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAdminToken() },
+      body: JSON.stringify({ id, action })
+    });
+    if (res.status === 401) { clearAdminToken(); showPage('adminLogin'); return; }
+    if (!res.ok) { showToast('Could not update registration', 'error'); return; }
+    showToast(action === 'approve' ? 'Approved — confirmation email sent ✓' : 'Rejected — email sent', 'success');
+    renderAdmin();
+  } catch (e) {
+    showToast('Network error', 'error');
+  }
+}
+
+// ─────────────────────────────────────────────
+function switchAdminTab(tab) {
+  document.getElementById('admin-tab-regs').style.display = tab === 'regs' ? 'block' : 'none';
+  document.getElementById('admin-tab-sessions').style.display = tab === 'sessions' ? 'block' : 'none';
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'sessions') renderAdminSessions();
+}
+
+function renderAdminSessions() {
+  const aiSessions = adminSessionsCache.filter(s => s.track === 'ai').sort((a,b) => a.slotIndex - b.slotIndex);
+  const fSessions = adminSessionsCache.filter(s => s.track === 'frontier').sort((a,b) => a.slotIndex - b.slotIndex);
+
+  function renderTrackRows(sessions) {
+    return sessions.map(s => {
+      const pct = Math.round((s.registrations / s.capacity) * 100);
+      const fillColor = pct >= 100 ? 'var(--danger)' : pct >= 80 ? 'var(--track-f)' : 'var(--success)';
+      return `<div class="admin-session-row">
+        <div class="admin-session-info">
+          <div class="s-title">${s.title}</div>
+          <div class="s-meta">${TIMESLOTS[s.slotIndex]} · ${s.speaker}</div>
+        </div>
+        <div class="cap-bar">
+          <div style="font-size:11px;color:var(--text-m);font-family:var(--font-m)">${s.registrations} / ${s.capacity} registered</div>
+          <div class="cap-bar-track"><div class="cap-bar-fill" style="width:${Math.min(pct,100)}%;background:${fillColor}"></div></div>
+        </div>
+        <button class="action-btn" onclick="openEditSession('${s.id}')" style="border-color:var(--border-a);color:var(--text-s);white-space:nowrap">Edit session</button>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('adminSessionsGrid').innerHTML = `
+    <div class="admin-sessions-track">
+      <div class="admin-sessions-track-title">
+        <span class="track-badge ai">AI</span> Artificial Intelligence track
+      </div>
+      ${renderTrackRows(aiSessions)}
+    </div>
+    <div class="admin-sessions-track">
+      <div class="admin-sessions-track-title">
+        <span class="track-badge frontier">Frontier</span> Frontier Technologies track
+      </div>
+      ${renderTrackRows(fSessions)}
+    </div>`;
+}
+
+
+// ─────────────────────────────────────────────
+function openEditSession(id) {
+  const s = adminSessionsCache.find(s => s.id === id);
+  if (!s) return;
+  document.getElementById('editModalBody').innerHTML = `
+    <div class="form-group">
+      <label class="form-label">Session title</label>
+      <input class="form-input" id="edit-title" value="${s.title}">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Speaker</label>
+      <input class="form-input" id="edit-speaker" value="${s.speaker}">
+    </div>
+    <div class="two-col">
+      <div class="form-group">
+        <label class="form-label">Time slot</label>
+        <select class="form-select" id="edit-slot">
+          ${TIMESLOTS.map((t,i) => `<option value="${i}" ${i===s.slotIndex?'selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Room capacity</label>
+        <input class="form-input" id="edit-capacity" type="number" value="${s.capacity}" min="1">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" id="edit-desc" style="min-height:120px">${s.description}</textarea>
+    </div>
+    <button class="submit-btn" id="saveSessionBtn" style="margin-top:8px" onclick="saveEditSession('${id}')">Save changes</button>`;
+  document.getElementById('editModal').classList.add('open');
+}
+
+async function saveEditSession(id) {
+  const btn = document.getElementById('saveSessionBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  try {
+    const res = await fetch('/.netlify/functions/admin-update-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAdminToken() },
+      body: JSON.stringify({
+        id,
+        title: document.getElementById('edit-title').value.trim(),
+        speaker: document.getElementById('edit-speaker').value.trim(),
+        slotIndex: parseInt(document.getElementById('edit-slot').value),
+        capacity: parseInt(document.getElementById('edit-capacity').value),
+        description: document.getElementById('edit-desc').value.trim()
+      })
+    });
+    if (res.status === 401) { clearAdminToken(); showPage('adminLogin'); return; }
+    if (!res.ok) { showToast('Could not save session', 'error'); return; }
+
+    document.getElementById('editModal').classList.remove('open');
+    showToast('Session updated ✓', 'success');
+    renderAdminSessions();
+  } catch (e) {
+    showToast('Network error', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save changes';
+  }
+}
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' '+type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+updateBasketCount();
+renderHome();
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "apex25-registration",
+  "version": "1.0.0",
+  "private": true,
+  "description": "APEX 2025 conference registration site with Supabase + Resend backend",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "resend": "^4.0.0"
+  }
+}
