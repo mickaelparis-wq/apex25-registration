@@ -6,20 +6,21 @@ exports.handler = async (event) => {
   }
 
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from('site_settings')
-    .select('value')
-    .eq('key', 'hero_image_url')
-    .maybeSingle();
+  const { data, error } = await supabase.from('site_settings').select('key, value');
 
   if (error) {
     console.error(error);
     return { statusCode: 500, body: JSON.stringify({ error: 'Could not load site settings' }) };
   }
 
+  const settings = {};
+  for (const row of data || []) {
+    settings[row.key] = row.value;
+  }
+
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ heroImageUrl: data ? data.value : null })
+    body: JSON.stringify({ settings })
   };
 };

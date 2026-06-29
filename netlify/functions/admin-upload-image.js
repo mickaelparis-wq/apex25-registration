@@ -3,6 +3,16 @@ const { getSupabaseAdmin } = require('./_utils/supabaseAdmin');
 
 const MAX_BYTES = 5 * 1024 * 1024; // 5MB
 
+// Each slot maps to a fixed site_settings key and storage path prefix.
+const ALLOWED_SLOTS = new Set([
+  'hero_image_url',
+  'logo_barclays',
+  'logo_eagle_labs',
+  'logo_fintech_scotland',
+  'logo_data_lab',
+  'logo_fintech_festival'
+]);
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
@@ -18,7 +28,10 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const { imageBase64, contentType } = payload;
+  const { slot, imageBase64, contentType } = payload;
+  if (!ALLOWED_SLOTS.has(slot)) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid slot' }) };
+  }
   if (!imageBase64 || !contentType || !contentType.startsWith('image/')) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing or invalid image' }) };
   }
@@ -28,8 +41,8 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Image too large (max 5MB)' }) };
   }
 
-  const ext = contentType.split('/')[1] || 'jpg';
-  const path = `hero.${ext}`;
+  const ext = contentType.split('/')[1] || 'png';
+  const path = `${slot}.${ext}`;
 
   const supabase = getSupabaseAdmin();
   const { error: uploadError } = await supabase.storage
@@ -46,7 +59,7 @@ exports.handler = async (event) => {
 
   const { error: settingsError } = await supabase
     .from('site_settings')
-    .upsert({ key: 'hero_image_url', value: url });
+    .upsert({ key: slot, value: url });
 
   if (settingsError) {
     console.error(settingsError);

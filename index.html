@@ -80,6 +80,12 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop
 .hero-title em{font-style:normal;color:var(--accent)}
 .hero-desc{font-size:16px;color:var(--text-s);line-height:1.7}
 
+.partner-strip{padding:20px 0;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.55)}
+.partner-strip-inner{display:flex;flex-wrap:wrap;gap:32px;align-items:center}
+.partner-group{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.partner-label{font-family:var(--font-m);font-size:11px;color:var(--text-m);text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap}
+.partner-logo{height:30px;max-width:140px;object-fit:contain}
+
 .hero-meta-bar{padding:28px 0;border-bottom:1px solid var(--border)}
 .hero-meta{display:flex;flex-wrap:wrap;gap:24px}
 .hero-meta-item{display:flex;flex-direction:column;gap:2px}
@@ -324,6 +330,12 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop
     </div>
   </div>
 
+  <div class="partner-strip">
+    <div class="container">
+      <div class="partner-strip-inner" id="partnerStripInner"></div>
+    </div>
+  </div>
+
   <div class="hero-meta-bar">
     <div class="container">
       <div class="hero-meta">
@@ -479,10 +491,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop
         <button class="logout-btn" onclick="adminLogout()">Sign out</button>
       </div>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px">
-        <h3 style="font-family:var(--font-d);font-size:16px;font-weight:700;margin-bottom:12px">Conference image</h3>
-        <div id="adminImagePreview" style="margin-bottom:12px"></div>
-        <input type="file" id="adminImageInput" accept="image/*" style="display:none" onchange="handleAdminImageUpload(event)">
-        <button class="edit-sessions-btn" style="width:auto;display:inline-block;margin-top:0" id="adminImageUploadBtn" onclick="document.getElementById('adminImageInput').click()">Upload new image</button>
+        <h3 style="font-family:var(--font-d);font-size:16px;font-weight:700;margin-bottom:4px">Brand assets</h3>
+        <p style="font-size:13px;color:var(--text-m);margin-bottom:16px">Hero banner image and partner logos shown on the homepage.</p>
+        <div id="brandAssetsList"></div>
+        <input type="file" id="brandAssetInput" accept="image/*" style="display:none" onchange="handleBrandAssetUpload(event)">
       </div>
       <div class="admin-stats" id="adminStats"></div>
       <div style="display:flex;gap:12px;margin-bottom:28px;border-bottom:1px solid var(--border)">
@@ -574,8 +586,37 @@ const TIMESLOTS = [
 let state = {
   sessions: [],
   basket: loadBasket(),
-  heroImageUrl: null
+  siteSettings: {}
 };
+
+const PARTNER_LOGOS = [
+  { group: 'Hosted by', key: 'logo_barclays', name: 'Barclays' },
+  { group: 'Hosted by', key: 'logo_eagle_labs', name: 'Barclays Eagle Labs' },
+  { group: 'In collaboration with', key: 'logo_fintech_scotland', name: 'FinTech Scotland' },
+  { group: 'In collaboration with', key: 'logo_data_lab', name: 'The Data Lab' },
+  { group: 'Part of', key: 'logo_fintech_festival', name: 'Scotland FinTech Festival' }
+];
+
+function logoOrText(url, name) {
+  return url
+    ? `<img class="partner-logo" src="${url}" alt="${name}">`
+    : `<span style="font-size:13px;color:var(--text-s);font-weight:700">${name}</span>`;
+}
+
+function renderPartnerStrip(settings) {
+  const groups = [];
+  PARTNER_LOGOS.forEach(item => {
+    let group = groups.find(g => g.label === item.group);
+    if (!group) { group = { label: item.group, items: [] }; groups.push(group); }
+    group.items.push(logoOrText(settings[item.key], item.name));
+  });
+
+  document.getElementById('partnerStripInner').innerHTML = groups.map(g => `
+    <div class="partner-group">
+      <span class="partner-label">${g.label}</span>
+      ${g.items.join('')}
+    </div>`).join('');
+}
 
 let adminRegistrations = [];
 let adminSessionsCache = [];
@@ -651,16 +692,19 @@ async function renderHome() {
     const res = await fetch('/.netlify/functions/site-settings');
     if (res.ok) {
       const data = await res.json();
-      state.heroImageUrl = data.heroImageUrl;
+      state.siteSettings = data.settings || {};
     }
   } catch (e) {}
 
   const banner = document.getElementById('heroBanner');
-  if (state.heroImageUrl) {
-    banner.style.backgroundImage = `linear-gradient(180deg, rgba(10,20,50,0.05), rgba(10,20,50,0.25)), url('${state.heroImageUrl}')`;
+  const heroImageUrl = state.siteSettings.hero_image_url;
+  if (heroImageUrl) {
+    banner.style.backgroundImage = `linear-gradient(180deg, rgba(10,20,50,0.05), rgba(10,20,50,0.25)), url('${heroImageUrl}')`;
   } else {
     banner.style.backgroundImage = '';
   }
+
+  renderPartnerStrip(state.siteSettings);
 
   try {
     await fetchSessions();
@@ -961,28 +1005,50 @@ function adminLogout() {
   showPage('home');
 }
 
-async function renderAdminImagePreview() {
+const ASSET_SLOTS = [
+  { key: 'hero_image_url', label: 'Hero banner image' },
+  { key: 'logo_barclays', label: 'Barclays logo' },
+  { key: 'logo_eagle_labs', label: 'Barclays Eagle Labs logo' },
+  { key: 'logo_fintech_scotland', label: 'FinTech Scotland logo' },
+  { key: 'logo_data_lab', label: 'The Data Lab logo' },
+  { key: 'logo_fintech_festival', label: 'Scotland FinTech Festival logo' }
+];
+
+let pendingUploadSlot = null;
+
+async function renderBrandAssetsPanel() {
   try {
     const res = await fetch('/.netlify/functions/site-settings');
     if (res.ok) {
       const data = await res.json();
-      state.heroImageUrl = data.heroImageUrl;
+      state.siteSettings = data.settings || {};
     }
   } catch (e) {}
 
-  const el = document.getElementById('adminImagePreview');
-  el.innerHTML = state.heroImageUrl
-    ? `<img src="${state.heroImageUrl}" style="width:100%;max-width:400px;height:160px;object-fit:cover;border-radius:var(--radius);border:1px solid var(--border)">`
-    : `<p style="font-size:13px;color:var(--text-m)">No image set yet — visitors see no hero image.</p>`;
+  document.getElementById('brandAssetsList').innerHTML = ASSET_SLOTS.map(slot => {
+    const url = state.siteSettings[slot.key];
+    const preview = url
+      ? `<img src="${url}" style="height:40px;max-width:160px;object-fit:contain;background:#fff;border:1px solid var(--border);border-radius:4px;padding:4px">`
+      : `<span style="font-size:12px;color:var(--text-m)">Not set</span>`;
+    return `<div class="admin-session-row">
+      <div class="admin-session-info">
+        <div class="s-title">${slot.label}</div>
+      </div>
+      ${preview}
+      <button class="action-btn" style="border-color:var(--border-a);color:var(--text-s);white-space:nowrap" onclick="triggerAssetUpload('${slot.key}')">Upload</button>
+    </div>`;
+  }).join('');
 }
 
-async function handleAdminImageUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+function triggerAssetUpload(slotKey) {
+  pendingUploadSlot = slotKey;
+  document.getElementById('brandAssetInput').click();
+}
 
-  const btn = document.getElementById('adminImageUploadBtn');
-  btn.disabled = true;
-  btn.textContent = 'Uploading…';
+async function handleBrandAssetUpload(e) {
+  const file = e.target.files[0];
+  const slot = pendingUploadSlot;
+  if (!file || !slot) return;
 
   try {
     const dataUrl = await new Promise((resolve, reject) => {
@@ -996,22 +1062,21 @@ async function handleAdminImageUpload(e) {
     const res = await fetch('/.netlify/functions/admin-upload-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAdminToken() },
-      body: JSON.stringify({ imageBase64: base64, contentType: file.type })
+      body: JSON.stringify({ slot, imageBase64: base64, contentType: file.type })
     });
 
     if (res.status === 401) { clearAdminToken(); showPage('adminLogin'); return; }
     const data = await res.json();
     if (!res.ok) { showToast(data.error || 'Upload failed', 'error'); return; }
 
-    state.heroImageUrl = data.url;
-    renderAdminImagePreview();
-    showToast('Conference image updated ✓', 'success');
+    state.siteSettings[slot] = data.url;
+    renderBrandAssetsPanel();
+    showToast('Image updated ✓', 'success');
   } catch (err) {
     showToast('Network error', 'error');
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Upload new image';
     e.target.value = '';
+    pendingUploadSlot = null;
   }
 }
 
@@ -1038,7 +1103,7 @@ async function renderAdmin(filter) {
     return;
   }
 
-  renderAdminImagePreview();
+  renderBrandAssetsPanel();
 
   const regs = adminRegistrations.filter(r => filter === 'all' || r.status === filter);
 
