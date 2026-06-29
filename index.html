@@ -325,15 +325,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.92);backdrop-fi
       </div>
     </div>
 
-    <!-- Conference image -->
+    <!-- Conference image (set by an admin; see Admin dashboard) -->
     <div class="conf-image-section">
-      <div id="confImageContainer">
-        <div class="conf-image-placeholder" onclick="document.getElementById('imageUploadInput').click()">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <p>Click to upload a conference image</p>
-        </div>
-        <input type="file" id="imageUploadInput" accept="image/*" onchange="handleImageUpload(event)">
-      </div>
+      <div id="confImageContainer"></div>
     </div>
 
     <!-- Sessions -->
@@ -470,6 +464,12 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.92);backdrop-fi
         <h1>Registrations</h1>
         <button class="logout-btn" onclick="adminLogout()">Sign out</button>
       </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px">
+        <h3 style="font-family:var(--font-d);font-size:16px;font-weight:700;margin-bottom:12px">Conference image</h3>
+        <div id="adminImagePreview" style="margin-bottom:12px"></div>
+        <input type="file" id="adminImageInput" accept="image/*" style="display:none" onchange="handleAdminImageUpload(event)">
+        <button class="edit-sessions-btn" style="width:auto;display:inline-block;margin-top:0" id="adminImageUploadBtn" onclick="document.getElementById('adminImageInput').click()">Upload new image</button>
+      </div>
       <div class="admin-stats" id="adminStats"></div>
       <div style="display:flex;gap:12px;margin-bottom:28px;border-bottom:1px solid var(--border)">
         <button id="tab-regs" class="admin-tab active" onclick="switchAdminTab('regs')">Registrations</button>
@@ -560,7 +560,7 @@ const TIMESLOTS = [
 let state = {
   sessions: [],
   basket: loadBasket(),
-  confImage: localStorage.getItem('apex25_conf_image') || null
+  heroImageUrl: null
 };
 
 let adminRegistrations = [];
@@ -633,11 +633,18 @@ function showPage(name) {
 // HOME / SESSIONS
 // ─────────────────────────────────────────────
 async function renderHome() {
-  if (state.confImage) {
-    document.getElementById('confImageContainer').innerHTML =
-      `<img src="${state.confImage}" class="conf-image" alt="Conference" onclick="document.getElementById('imageUploadInput2').click()">
-       <input type="file" id="imageUploadInput2" accept="image/*" style="display:none" onchange="handleImageUpload(event)">`;
-  }
+  try {
+    const res = await fetch('/.netlify/functions/site-settings');
+    if (res.ok) {
+      const data = await res.json();
+      state.heroImageUrl = data.heroImageUrl;
+    }
+  } catch (e) {}
+
+  document.getElementById('confImageContainer').innerHTML = state.heroImageUrl
+    ? `<img src="${state.heroImageUrl}" class="conf-image" alt="Conference">`
+    : '';
+
   try {
     await fetchSessions();
     renderTracks();
@@ -733,18 +740,6 @@ function toggleBasket(id) {
   }
   saveBasket();
   renderTracks();
-}
-
-function handleImageUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    state.confImage = ev.target.result;
-    localStorage.setItem('apex25_conf_image', state.confImage);
-    renderHome();
-  };
-  reader.readAsDataURL(file);
 }
 
 // ─────────────────────────────────────────────
@@ -949,6 +944,60 @@ function adminLogout() {
   showPage('home');
 }
 
+async function renderAdminImagePreview() {
+  try {
+    const res = await fetch('/.netlify/functions/site-settings');
+    if (res.ok) {
+      const data = await res.json();
+      state.heroImageUrl = data.heroImageUrl;
+    }
+  } catch (e) {}
+
+  const el = document.getElementById('adminImagePreview');
+  el.innerHTML = state.heroImageUrl
+    ? `<img src="${state.heroImageUrl}" style="width:100%;max-width:400px;height:160px;object-fit:cover;border-radius:var(--radius);border:1px solid var(--border)">`
+    : `<p style="font-size:13px;color:var(--text-m)">No image set yet — visitors see no hero image.</p>`;
+}
+
+async function handleAdminImageUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const btn = document.getElementById('adminImageUploadBtn');
+  btn.disabled = true;
+  btn.textContent = 'Uploading…';
+
+  try {
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    const base64 = dataUrl.split(',')[1];
+
+    const res = await fetch('/.netlify/functions/admin-upload-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getAdminToken() },
+      body: JSON.stringify({ imageBase64: base64, contentType: file.type })
+    });
+
+    if (res.status === 401) { clearAdminToken(); showPage('adminLogin'); return; }
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || 'Upload failed', 'error'); return; }
+
+    state.heroImageUrl = data.url;
+    renderAdminImagePreview();
+    showToast('Conference image updated ✓', 'success');
+  } catch (err) {
+    showToast('Network error', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Upload new image';
+    e.target.value = '';
+  }
+}
+
 async function fetchAdminData() {
   const res = await fetch('/.netlify/functions/admin-registrations', {
     headers: { Authorization: 'Bearer ' + getAdminToken() }
@@ -971,6 +1020,8 @@ async function renderAdmin(filter) {
   } catch (e) {
     return;
   }
+
+  renderAdminImagePreview();
 
   const regs = adminRegistrations.filter(r => filter === 'all' || r.status === filter);
 
