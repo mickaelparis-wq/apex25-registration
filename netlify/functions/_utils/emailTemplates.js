@@ -27,7 +27,7 @@ function wrapper(title, bodyHtml) {
   return `
   <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a;">
     <h1 style="font-size:22px;margin-bottom:4px;">${escapeHtml(title)}</h1>
-    <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#888;margin-bottom:24px;">APEX 2025 &middot; 26&ndash;27 March 2025 &middot; London, UK</div>
+    <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#888;margin-bottom:24px;">APEX 2025 &middot; 1 October 2026 &middot; Barclays&rsquo; Glasgow Campus</div>
     ${bodyHtml}
     <p style="margin-top:32px;font-size:12px;color:#999;">APEX 2025 &mdash; AI &amp; Frontier Technologies Conference</p>
   </div>`;
@@ -48,10 +48,10 @@ function approveEmail({ name, sessions, ref }) {
   return wrapper(
     "You're confirmed for APEX 2025",
     `<p>Hi ${escapeHtml(name)},</p>
-     <p>Good news — your registration (<strong>${escapeHtml(ref)}</strong>) has been approved. We look forward to seeing you at APEX 2025, 26&ndash;27 March 2025 in London.</p>
+     <p>Good news — your registration (<strong>${escapeHtml(ref)}</strong>) has been approved. We look forward to seeing you at APEX 2025, 1 October 2026 at Barclays&rsquo; Glasgow Campus.</p>
      <p>Your confirmed sessions:</p>
      ${sessionListHtml(sessions)}
-     <p>This event is invite-only — please keep your confirmation handy for check-in.</p>`
+     <p>Please keep your confirmation handy for check-in.</p>`
   );
 }
 
